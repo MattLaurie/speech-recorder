@@ -4,7 +4,7 @@ import * as os from "os";
 import { Readable } from "stream";
 import WebrtcVad from "webrtcvad";
 import uuid from "uuid/v4";
-import SileroVad from "./vad";
+// import SileroVad from "./vad";
 
 const portAudioPath = `${__dirname}/../build/Release/portaudio.node`;
 let portAudioBindings: any;
@@ -72,7 +72,7 @@ export class SpeechRecorder {
   private silenceThreshold: number = 10;
   private triggers: Trigger[] = [];
   private webrtcVad: WebrtcVad;
-  private vad = new SileroVad();
+  // private vad = new SileroVad();
   private vadBuffer: number[][] = [];
   private vadBufferSize: number = 10;
   private vadRateLimit: number = 0;
@@ -154,21 +154,21 @@ export class SpeechRecorder {
     let probability = speaking ? 1 : 0;
 
     // double-check the WebRTC VAD with the Silero VAD
-    if (
-      !this.disableSecondPass &&
-      speaking &&
-      this.vadBuffer.length == this.vadBufferSize &&
-      this.vad.ready
-    ) {
-      probability = await this.vad.process([].concat(...this.vadBuffer));
-      speaking = probability > this.vadThreshold;
-
-      // only trigger the rate limit while we're speaking, or else the next call might not use
-      // the Silero VAD, which would start the speaking state
-      if (this.vadRateLimit > 0 && speaking) {
-        this.vadBuffer.splice(0, Math.min(this.vadRateLimit, this.vadBufferSize));
-      }
-    }
+    // if (
+    //   !this.disableSecondPass &&
+    //   speaking &&
+    //   this.vadBuffer.length == this.vadBufferSize &&
+    //   this.vad.ready
+    // ) {
+    //   probability = await this.vad.process([].concat(...this.vadBuffer));
+    //   speaking = probability > this.vadThreshold;
+    //
+    //   // only trigger the rate limit while we're speaking, or else the next call might not use
+    //   // the Silero VAD, which would start the speaking state
+    //   if (this.vadRateLimit > 0 && speaking) {
+    //     this.vadBuffer.splice(0, Math.min(this.vadRateLimit, this.vadBufferSize));
+    //   }
+    // }
 
     if (speaking) {
       this.consecutiveSilence = 0;
@@ -234,9 +234,9 @@ export class SpeechRecorder {
   }
 
   async start(startOptions: any = {}) {
-    if (!this.disableSecondPass) {
-      await this.vad.load();
-    }
+    // if (!this.disableSecondPass) {
+    //   await this.vad.load();
+    // }
 
     this.leadingBuffer = [];
     this.audioStream = new AudioStream({
