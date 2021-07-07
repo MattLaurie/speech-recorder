@@ -4,6 +4,11 @@ speech-recorder is a cross-platform, native [node.js](https://nodejs.org) [addon
 
 This module is used for speech recognition in [Serenade](https://serenade.ai). Serenade enables you to write code through natural speech, rather than typing.
 
+## Fork
+
+* Temporarily remove Silero until there is an onnx version that works on Mac M1
+* Add a callback to stop to wait for the microphone device to flush the contents
+
 ## Installation
 
 speech-recorder has been tested on Windows 10, macOS 10.14+, and Ubuntu 18.04+ (and may work on other platforms as well).
