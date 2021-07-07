@@ -49,8 +49,9 @@ class AudioStream extends Readable {
     this.audio.start();
   }
 
-  stop() {
-    this.audio.quit(() => {});
+  stop(callback?: () => void) {
+    const noop = () => {};
+    this.audio.quit(callback || noop);
   }
 }
 
@@ -268,9 +269,13 @@ export class SpeechRecorder {
     this.consecutiveSpeech = 0;
   }
 
-  stop() {
-    this.audioStream.stop();
-    this.reset();
+  stop(callback?: () => void) {
+    this.audioStream.stop(() => {
+      this.reset();
+      if (callback) {
+        callback();
+      }
+    });
   }
 }
 
